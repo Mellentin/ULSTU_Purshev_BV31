@@ -94,5 +94,12 @@ namespace Laboratry
                 g.DrawRectangle(pen, _startPosX - 5, _startPosY, 10, 50);
             }
         }
+        /// Смена дополнительного цвета
+        /// </summary>
+        /// <param name="color"></param>
+        public void SetDopColor(Color color)
+        {
+            DopColor = color;
+        }
     }
 }

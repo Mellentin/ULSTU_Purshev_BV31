@@ -3,6 +3,8 @@ using System.Windows.Forms;
 
 namespace Laboratry
 {
+    public delegate void carDelegate(ITransport car);
+
     static class Program
     {
         /// <summary>
