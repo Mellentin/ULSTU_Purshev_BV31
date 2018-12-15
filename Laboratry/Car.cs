@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace Laboratry
 {
@@ -23,6 +24,20 @@ namespace Laboratry
             MaxSpeed = maxSpeed;
             Weight = weight;
             MainColor = mainColor;
+        }
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="info">Информация по объекту</param>
+        public Car(string info)
+        {
+            string[] strs = info.Split(';');
+            if (strs.Length == 3)
+            {
+                MaxSpeed = Convert.ToInt32(strs[0]);
+                Weight = Convert.ToInt32(strs[1]);
+                MainColor = Color.FromName(strs[2]);
+            }
         }
         public override void MoveTransport(Direction direction)
         {
@@ -59,7 +74,6 @@ namespace Laboratry
                     break;
             }
         }
-
         public override void DrawCar(Graphics g)
         {
             Pen pen = new Pen(Color.Black);
@@ -94,6 +108,10 @@ namespace Laboratry
             g.DrawRectangle(pen, _startPosX + 25, _startPosY + 5, 35, 40);
             g.DrawRectangle(pen, _startPosX + 65, _startPosY + 10, 25, 30);
             g.DrawRectangle(pen, _startPosX, _startPosY + 10, 15, 30);
+        }
+        public override string ToString()
+        {
+            return MaxSpeed + ";" + Weight + ";" + MainColor.Name;
         }
     }
 }

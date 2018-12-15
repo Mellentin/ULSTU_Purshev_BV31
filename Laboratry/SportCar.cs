@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace Laboratry
 {
@@ -40,6 +41,20 @@ namespace Laboratry
             FrontSpoiler = frontSpoiler;
             SideSpoiler = sideSpoiler;
             BackSpoiler = backSpoiler;
+        }
+        public SportCar(string info) : base(info)
+        {
+            string[] strs = info.Split(';');
+            if (strs.Length == 7)
+            {
+                MaxSpeed = Convert.ToInt32(strs[0]);
+                Weight = Convert.ToInt32(strs[1]);
+                MainColor = Color.FromName(strs[2]);
+                DopColor = Color.FromName(strs[3]);
+                FrontSpoiler = Convert.ToBoolean(strs[4]);
+                BackSpoiler = Convert.ToBoolean(strs[5]);
+                SideSpoiler = Convert.ToBoolean(strs[6]);
+            }
         }
         public override void DrawCar(Graphics g)
         {
@@ -100,6 +115,10 @@ namespace Laboratry
         public void SetDopColor(Color color)
         {
             DopColor = color;
+        }
+        public override string ToString()
+        {
+            return base.ToString() + ";" + DopColor.Name + ";" + FrontSpoiler + ";" + SideSpoiler + ";" + BackSpoiler;
         }
     }
 }
