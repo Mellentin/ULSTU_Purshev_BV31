@@ -7,50 +7,11 @@ using System.Threading.Tasks;
 
 namespace Laboratry
 {
-    public enum Direction
+    /// <summary>
+    /// Класс отрисовки гоночного автомобиля
+    /// </summary>
+    public class SportCar : Car
     {
-        Up,
-        Down,
-        Left,
-        Right
-    }
-
-    class SportCar
-    {
-        /// <summary>
-        /// Левая координата отрисовки автомобиля
-        /// </summary>
-        private float _startPosX;
-        /// <summary>
-        /// Правая кооридната отрисовки автомобиля
-        /// </summary>
-        private float _startPosY;
-        /// <summary>
-        /// Ширина окна отрисовки
-        /// </summary>
-        private int _pictureWidth;
-        //Высота окна отрисовки
-        private int _pictureHeight;
-        /// <summary>
-        /// Ширина отрисовки автомобиля
-        /// </summary>
-        private const int carWidth = 100;
-        /// <summary>
-        /// Ширина отрисовки автомобиля
-        /// </summary>
-        private const int carHeight = 60;
-        /// <summary>
-        /// Максимальная скорость
-        /// </summary>
-        public int MaxSpeed { private set; get; }
-        /// <summary>
-        /// Вес автомобиля
-        /// </summary>
-        public float Weight { private set; get; }
-        /// <summary>
-        /// Основной цвет кузова
-        /// </summary>
-        public Color MainColor { private set; get; }
         /// <summary>
         /// Дополнительный цвет
         /// </summary>
@@ -67,7 +28,6 @@ namespace Laboratry
         /// Признак наличия заднего спойлера
         /// </summary>
         public bool BackSpoiler { private set; get; }
-
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -78,76 +38,15 @@ namespace Laboratry
         /// <param name="frontSpoiler">Признак наличия переднего спойлера</param>
         /// <param name="sideSpoiler">Признак наличия боковых спойлеров</param>
         /// <param name="backSpoiler">Признак наличия заднего спойлера</param>
-        public SportCar(int maxSpeed, float weight, Color mainColor, Color dopColor, bool frontSpoiler, bool sideSpoiler, bool backSpoiler)
+        public SportCar(int maxSpeed, float weight, Color mainColor, Color dopColor, bool frontSpoiler, bool sideSpoiler, bool backSpoiler) :
+        base(maxSpeed, weight, mainColor)
         {
-            MaxSpeed = maxSpeed;
-            Weight = weight;
-            MainColor = mainColor;
             DopColor = dopColor;
             FrontSpoiler = frontSpoiler;
             SideSpoiler = sideSpoiler;
             BackSpoiler = backSpoiler;
         }
-        /// <summary>
-        /// Установка позиции автомобиля
-        /// </summary>
-        /// <param name="x">Координата X</param>
-        /// <param name="y">Координата Y</param>
-        /// <param name="width">Ширина картинки</param>
-        /// <param name="height">Высота картинки</param>
-        public void SetPosition(int x, int y, int width, int height)
-        {
-            _startPosX = x;
-            _startPosY = y;
-            _pictureWidth = width;
-            _pictureHeight = height;
-        }
-
-        /// <summary>
-        /// Изменение направления пермещения
-        /// </summary>
-        /// <param name="direction">Направление</param>
-        public void MoveTransport(Direction direction)
-        {
-            float step = MaxSpeed * 100 / Weight;
-            switch (direction)
-            {
-                // вправо
-                case Direction.Right:
-                    if (_startPosX + step < _pictureWidth - carWidth)
-                    {
-                        _startPosX += step;
-                    }
-                    break;
-                //влево
-                case Direction.Left:
-                    if (_startPosX - step > 0)
-                    {
-                        _startPosX -= step;
-                    }
-                    break;
-                //вверх
-                case Direction.Up:
-                    if (_startPosY - step > 0)
-                    {
-                        _startPosY -= step;
-                    }
-                    break;
-                //вниз
-                case Direction.Down:
-                    if (_startPosY + step < _pictureHeight - carHeight)
-                    {
-                        _startPosY += step;
-                    }
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Отрисовка автомобиля
-        /// </summary>
-        /// <param name="g"></param>
-        public void DrawCar(Graphics g)
+        public override void DrawCar(Graphics g)
         {
             Pen pen = new Pen(Color.Black);
             // отрисуем сперва передний спойлер автомобиля (чтобы потом отрисовка автомобиля на него "легла")
@@ -183,40 +82,9 @@ namespace Laboratry
                 g.FillRectangle(spoiler, _startPosX + 25, _startPosY + 45, 40, 10);
             }
             // теперь отрисуем основной кузов автомобиля
-            //границы автомобиля
-            g.DrawEllipse(pen, _startPosX, _startPosY, 20, 20);
-            g.DrawEllipse(pen, _startPosX, _startPosY + 30, 20, 20);
-            g.DrawEllipse(pen, _startPosX + 70, _startPosY, 20, 20);
-            g.DrawEllipse(pen, _startPosX + 70, _startPosY + 30, 20, 20);
-            g.DrawRectangle(pen, _startPosX - 1, _startPosY + 10, 10, 30);
-            g.DrawRectangle(pen, _startPosX + 80, _startPosY + 10, 10, 30);
-            g.DrawRectangle(pen, _startPosX + 10, _startPosY - 1, 70, 52);
-            //задние фары
-            Brush brRed = new SolidBrush(Color.Red);
-            g.FillEllipse(brRed, _startPosX, _startPosY, 20, 20);
-            g.FillEllipse(brRed, _startPosX, _startPosY + 30, 20, 20);
-            //передние фары
-            Brush brYellow = new SolidBrush(Color.Yellow);
-            g.FillEllipse(brYellow, _startPosX + 70, _startPosY, 20, 20);
-            g.FillEllipse(brYellow, _startPosX + 70, _startPosY + 30, 20, 20);
-            //кузов
-            Brush br = new SolidBrush(MainColor);
-            g.FillRectangle(br, _startPosX, _startPosY + 10, 10, 30);
-            g.FillRectangle(br, _startPosX + 80, _startPosY + 10, 10, 30);
-            g.FillRectangle(br, _startPosX + 10, _startPosY, 70, 50);
-            //стекла
-            Brush brBlue = new SolidBrush(Color.LightBlue);
-            g.FillRectangle(brBlue, _startPosX + 60, _startPosY + 5, 5, 40);
-            g.FillRectangle(brBlue, _startPosX + 20, _startPosY + 5, 5, 40);
-            g.FillRectangle(brBlue, _startPosX + 25, _startPosY + 3, 35, 2);
-            g.FillRectangle(brBlue, _startPosX + 25, _startPosY + 46, 35, 2);
-            //выделяем рамкой крышу
-            g.DrawRectangle(pen, _startPosX + 25, _startPosY + 5, 35, 40);
-            g.DrawRectangle(pen, _startPosX + 65, _startPosY + 10, 25, 30);
-            g.DrawRectangle(pen, _startPosX, _startPosY + 10, 15, 30);
-
+            base.DrawCar(g);
             // рисуем гоночные полоски
-            br = new SolidBrush(DopColor);
+            SolidBrush br = new SolidBrush(DopColor);
             g.FillRectangle(br, _startPosX + 65, _startPosY + 15, 25, 5);
             g.FillRectangle(br, _startPosX + 65, _startPosY + 30, 25, 5);
             g.FillRectangle(br, _startPosX + 25, _startPosY + 15, 35, 5);
