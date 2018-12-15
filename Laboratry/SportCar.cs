@@ -6,7 +6,7 @@ namespace Laboratry
     /// <summary>
     /// Класс отрисовки гоночного автомобиля
     /// </summary>
-    public class SportCar : Car
+    public class SportCar : Car, IComparable<SportCar>, IEquatable<SportCar>
     {
         /// <summary>
         /// Дополнительный цвет
@@ -119,6 +119,95 @@ namespace Laboratry
         public override string ToString()
         {
             return base.ToString() + ";" + DopColor.Name + ";" + FrontSpoiler + ";" + SideSpoiler + ";" + BackSpoiler;
+        }
+        /// <summary>
+        /// Метод интерфейса IComparable для класса SportCar
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public int CompareTo(SportCar other)
+        {
+            var res = (this is Car).CompareTo(other is Car);
+            if (res != 0)
+            {
+                return res;
+            }
+            if (DopColor != other.DopColor)
+            {
+                DopColor.Name.CompareTo(other.DopColor.Name);
+            }
+            if (FrontSpoiler != other.FrontSpoiler)
+            {
+                return FrontSpoiler.CompareTo(other.FrontSpoiler);
+            }
+            if (SideSpoiler != other.SideSpoiler)
+            {
+                return SideSpoiler.CompareTo(other.SideSpoiler);
+            }
+            if (BackSpoiler != other.BackSpoiler)
+            {
+                return BackSpoiler.CompareTo(other.BackSpoiler);
+            }
+            return 0;
+        }
+        /// <summary>
+        /// Метод интерфейса IEquatable для класса SportCar
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(SportCar other)
+        {
+            var res = (this as Car).Equals(other as Car);
+            if (!res)
+            {
+                return res;
+            }
+            if (DopColor != other.DopColor)
+            {
+                return false;
+            }
+            if (FrontSpoiler != other.FrontSpoiler)
+            {
+                return false;
+            }
+            if (SideSpoiler != other.SideSpoiler)
+            {
+                return false;
+            }
+            if (BackSpoiler != other.BackSpoiler)
+            {
+                return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// Перегрузка метода от object
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(Object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            SportCar carObj = obj as SportCar;
+            if (carObj == null)
+            {
+                return false;
+            }
+            else
+            {
+                return Equals(carObj);
+            }
+        }
+        /// <summary>
+        /// Перегрузка метода от object
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }
