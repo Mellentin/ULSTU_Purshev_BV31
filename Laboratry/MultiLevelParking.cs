@@ -62,8 +62,7 @@ namespace Laboratry
         /// Сохранение информации по автомобилям на парковках в файл
         /// </summary>
         /// <param name="filename">Путь и имя файла</param>
-        /// <returns></returns>
-        public bool SaveData(string filename)
+        public void SaveData(string filename)
         {
             if (File.Exists(filename))
             {
@@ -81,10 +80,9 @@ namespace Laboratry
                         WriteToFile("Level" + Environment.NewLine, fs);
                         for (int i = 0; i < countPlaces; i++)
                         {
-                            var car = level[i];
-                            if (car != null)
+                            try
                             {
-                                //если место не пустое
+                                var car = level[i];
                                 //Записываем тип мшаины
                                 if (car.GetType().Name == "Car")
                                 {
@@ -97,11 +95,11 @@ namespace Laboratry
                                 //Записываемые параметры
                                 WriteToFile(car + Environment.NewLine, fs);
                             }
+                            finally { }
                         }
                     }
                 }
             }
-            return true;
         }
         /// <summary>
         /// Метод записи информации в файл
@@ -117,12 +115,11 @@ namespace Laboratry
         /// Загрузка нформации по автомобилям на парковках из файла
         /// </summary>
         /// <param name="filename"></param>
-        /// <returns></returns>
-        public bool LoadData(string filename)
+        public void LoadData(string filename)
         {
             if (!File.Exists(filename))
             {
-                return false;
+                throw new FileNotFoundException();
             }
             string bufferTextFromFile = "";
             using (FileStream fs = new FileStream(filename, FileMode.Open))
@@ -152,7 +149,7 @@ namespace Laboratry
             else
             {
                 //если нет такой записи, то это не те данные
-                return false;
+                throw new Exception("Неверный формат файла");
             }
             int counter = -1;
             ITransport car = null;
@@ -180,7 +177,6 @@ namespace Laboratry
                 }
                 parkingStages[counter][Convert.ToInt32(strs[i].Split(':')[0])] = car;
             }
-            return true;
         }
     }
 }
